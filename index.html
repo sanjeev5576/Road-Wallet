@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Road Wallet</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').then(() => {
+          console.log("Service Worker Registered");
+        });
+      });
+    }
+  </script>
+  <script>
+    let deferredPrompt;
+  
+    window.addEventListener("beforeinstallprompt", (e) => {
+      // Prevent the default install prompt
+      e.preventDefault();
+      deferredPrompt = e;
+  
+      // Show your custom install button
+      const installButton = document.getElementById("install-btn");
+      installButton.style.display = "block";
+  
+      installButton.addEventListener("click", () => {
+        // Show the native install prompt
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            console.log("User accepted the A2HS prompt");
+          } else {
+            console.log("User dismissed the A2HS prompt");
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+  </script>
+  
+</head>
+<body>
+  <button id="install-btn" style="display: none;">Install App</button>
+
+  <div class="app-container">
+    <!-- Header with logo and project title -->
+    <header class="header">
+      <div class="logo">🚗</div>
+      <h1>Road Wallet</h1>
+    </header>
+
+    <!-- Subheading displaying total expenses -->
+    <h3 class="total-expenses">Total Expenses: <span id="total-expenses">0</span></h3>
+
+    <!-- Expense logging section -->
+    <section class="expenses-section">
+      <h4>Add Expense</h4>
+      <input type="text" id="expense-name" placeholder="Expense Name">
+      <input type="number" id="expense-amount" placeholder="Amount">
+      <select id="expense-category">
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Accommodation">Accommodation</option>
+      </select>
+      <button id="add-expense">Add Expense</button>
+    </section>
+
+    <!-- List of expenses -->
+    <section class="expense-list-section">
+      <h2>Expenses</h2>
+      <ul id="expense-list"></ul>
+    </section>
+
+    <!-- Manage Travelers Button -->
+    <button id="manage-travelers">Manage Travelers</button>
+
+    <div id="traveler-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Manage Travelers</h2>
+        <ul id="traveler-list"></ul>
+        <input type="text" id="new-traveler-name" placeholder="Traveler Name">
+        <div class="modal-buttons">
+          <button id="add-traveler" class="small">Add Traveler</button>
+          <button id="close-modal" class="small">Close</button>
+        </div>
+      </div>
+    </div>
+    
+
+  <script type="module" src="index.js"></script>
+</body>
+</html>
