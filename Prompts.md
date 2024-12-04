@@ -29,3 +29,6 @@ Please include the entire JS code with detailed comments to help me understand i
 ### Prompt
 Please guide me through the necessary steps to make the Smart home interface more mobile-friendly 
 by allowing users to add it their device's home screen for easy access.
+
+## Store data with user id
+I want to manage data for each mobile user separately, So no other user's data can be visible for other user.
